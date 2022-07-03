@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 env:
-    DOCKER_TAG: "$(date +%Y%m%d%H%M%S)"
+    DOCKER_TAG: "${GITHUB_RUN_ID}"
     
 jobs:
 
