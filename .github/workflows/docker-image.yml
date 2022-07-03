@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: build container image
-      run: docker build image . --file Dockerfile --tag ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER
+      run: docker image build . --file Dockerfile --tag ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER
     - name: scan vulnerability
       run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container test --print-deps --org=demo_high --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER || true
     - name: monitor container image for vulnerability
