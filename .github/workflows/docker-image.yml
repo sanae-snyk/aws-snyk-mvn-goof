@@ -11,16 +11,16 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: "${{ secrets.SNYK_TOKEN }}"
+      DOCKER_LOGIN: "${{ secrets.DOCKER_LOGIN }}"
+      DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
 
     steps:
     - uses: actions/checkout@v1
     - name: Build the Docker image
       run: DOCKER_BUILDKIT=1 docker build . --file Dockerfile --tag my-snyk-demo-mvn-goof:$(date +%s)
     - name: Vulnerability scan with Snyk Container
-      env:
-        SNYK_TOKEN: "${{ secrets.SNYK_TOKEN }}"
-        DOCKER_LOGIN: "${{ secrets.DOCKER_LOGIN }}"
-        DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
       run: |
         echo "test 01: $DOCKER_LOGIN"
         echo "test 02: ${{env.DOCKER_LOGIN}}"
