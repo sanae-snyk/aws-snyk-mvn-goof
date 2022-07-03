@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: "1"
-      DOCKER_LOGIN: "${{ secrets.DOCKER_LOGIN }}"
+      DOCKER_LOGIN: "lucmaeda"
       DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
       SNYK_TOKEN: "${{ secrets.SNYK_TOKEN }}"
     steps:
