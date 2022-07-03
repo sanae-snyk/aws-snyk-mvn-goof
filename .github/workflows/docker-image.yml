@@ -22,4 +22,9 @@ jobs:
         DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
-        SNYK_TOKEN=${SNYK_TOKEN} docker run -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container test --print-deps --org=demo_high --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 lucmaeda/my-snyk-demo-mvn-goof:$(date +%s) 
+        echo "set api key"
+        docker run -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk config set api=${SNYK_TOKEN}
+        echo "execute snyk auth"
+        docker run -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk auth ${SNYK_TOKEN}
+        echo "execute docker run"
+        docker run -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container test --print-deps --org=demo_high --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 lucmaeda/my-snyk-demo-mvn-goof:$(date +%s)
