@@ -17,13 +17,9 @@ jobs:
     - name: Build the Docker image
       run: DOCKER_BUILDKIT=1 docker build . --file Dockerfile --tag my-snyk-demo-mvn-goof:$(date +%s)
     - name: Vulnerability scan with Snyk Container
-      uses: snyk/actions/docker@master
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with: 
-        image: lucmaeda/my-snyk-demo-mvn-goof:$(date +%s)
-        args: --print-deps --org=demo_high --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8
-        #docker_login: ${{ secrets.DOCKER_LOGIN }}
-        #docker_password: ${{ secrets.DOCKER_PASSWORD }}
-      #run: |
-        #docker run --env SNYK_TOKEN -i -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container test --print-deps --org=demo_high --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 lucmaeda/my-snyk-demo-mvn-goof:$(date +%s) 
+        DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        SNYK_TOKEN=${SNYK_TOKEN} docker run -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container test --print-deps --org=demo_high --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 lucmaeda/my-snyk-demo-mvn-goof:$(date +%s) 
