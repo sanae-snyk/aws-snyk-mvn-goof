@@ -20,6 +20,6 @@ jobs:
     - uses: actions/checkout@v1
     - name: update_container_image_rebuild_scan_push
       run: |
-        echo "[${{ github.run.id }}]"
-        #docker build . --file Dockerfile --tag lucmaeda/my-snyk-demo-mvn-goof:github.run.id
-        #docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container test --print-deps --org=demo_high --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 lucmaeda/my-snyk-demo-mvn-goof:github.run.id || true
+        echo "[$GITHUB_RUN_NUMBER]"
+        #docker build . --file Dockerfile --tag lucmaeda/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER
+        #docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container test --print-deps --org=demo_high --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 lucmaeda/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER || true
