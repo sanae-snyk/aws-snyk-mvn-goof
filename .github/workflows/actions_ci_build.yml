@@ -16,7 +16,9 @@ jobs:
     - name: execute automated tests
       run: echo "running automated tests of appcode"
   scan_vulnerability:
+    needs: test_appcode
     runs-on: ubuntu-latest
+    container: snyk/snyk:maven-3-jdk-8	
     environment: snyk_aws_demo
     env:
       ORG_ID: demo_high
@@ -35,20 +37,22 @@ jobs:
         snyk iac test --org=${ORG_ID} --scan=planned-values --report || true # *1
         snyk monitor --org=${ORG_ID} --all-projects --detection-depth=8 --print-deps --remote-repo-url=aws_snyk_mvn_goof # *1
   refresh_container:
+    needs: scan_vulnerability
     environment: snyk_aws_demo
     runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: "1"
       DOCKER_LOGIN: "${{ secrets.DOCKER_LOGIN }}"
+      ORG_ID: demo_high
       SNYK_TOKEN: "${{ secrets.SNYK_TOKEN }}"
     steps:
     - uses: actions/checkout@v1
     - name: build container image
       run: docker image build . --file Dockerfile --tag ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER
     - name: scan vulnerability
-      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container test --print-deps --org=demo_high --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER || true
+      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container test --print-deps --org=${ORG_ID} --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER || true # *1
     - name: monitor container image for vulnerability
-      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container monitor --print-deps --org=demo_high --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER
+      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container monitor --print-deps --org=${ORG_ID} --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER || true # *1
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
