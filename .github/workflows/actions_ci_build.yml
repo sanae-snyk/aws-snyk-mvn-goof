@@ -24,7 +24,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: build appcode
-      run: mvn install .
+      run: mvn install 
     - name: scan vulnerability with Snyk
       run: |
         snyk test --org=${ORG_ID} --all-projects --detection-depth=8 --print-deps --remote-repo-url=aws_snyk_mvn_goof --severity-threshold=low || true # *1 replace with snyk-filter or snyk-delta
