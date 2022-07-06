@@ -102,7 +102,7 @@ jobs:
           name: Push to AWS ECR Public
           command: |
             source /tmp/ecr/ecr_envars
-            aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_URL
+            aws ecr-public get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin $ECR_URL
             docker push $ECR_PUBLIC_URI
       - persist_to_workspace:
           root: /tmp/ecr/
@@ -169,7 +169,7 @@ jobs:
           command: |
             source /tmp/ecr/ecr_envars
             sudo apt-get update && sudo apt-get install -y groff groff-base less wget
-            aws ecr-public delete-repository --region us-east-1 --repository-name $ECR_NAME --force
+            aws ecr-public delete-repository --region ap-northeast-1 --repository-name $ECR_NAME --force
       - terraform/init:
           path: ./terraform/ecr
       - terraform/destroy:
