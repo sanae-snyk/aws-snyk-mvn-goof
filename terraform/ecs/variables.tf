@@ -2,10 +2,10 @@ variable "availability_zones" {
   type        = list(string)
   description = "AWS Availability Zones"
   default = [
-    "us-east-1a",
-    "us-east-1b",
-    "us-east-1c",
-    "us-east-1e",
+    "ap-northeast-1a",
+    "ap-northeast-1b",
+    "ap-northeast-1c",
+    "ap-northeast-1e",
   ]
 }
 
@@ -31,12 +31,12 @@ variable "iam_profile" {
 
 variable "asg_min" {
   description = "Min Instances"
-  default     = 2
+  default     = 1
 }
 
 variable "asg_max" {
   description = "Max Instances"
-  default     = 5
+  default     = 3
 }
 
 variable "asg_desired" {
@@ -47,7 +47,7 @@ variable "asg_desired" {
 variable "docker_img_name" {
   type        = string
   description = "Name of the docker image being deployed"
-  default     = "ariv3ra/snyk-pulumi-pipelines"
+  default     = "lucmaeda/my-snyk-demo-mvn-goof"
 }
 
 variable "docker_img_tag" {

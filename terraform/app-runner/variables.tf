@@ -1,7 +1,7 @@
 variable "image_name" {
   type        = string
   description = "Name of the docker image being deployed"
-  default     = "public.ecr.aws/k8z4c6u3/aws-snyk"
+  default     = "docker.io/lucmaeda/my-snyk-demo-mvn-goof"
 }
 
 variable "image_tag" {

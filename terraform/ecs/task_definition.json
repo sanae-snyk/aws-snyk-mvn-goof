@@ -18,8 +18,8 @@
       "logDriver": "awslogs",
       "options": {
         "awslogs-group": "awslogs-app-amd",
-        "awslogs-region": "us-east-1",
-        "awslogs-stream-prefix": "devrel-app-amd"
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "customersolutions-app-amd"
       }
     }
   }

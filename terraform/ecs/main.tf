@@ -1,7 +1,7 @@
 terraform {
   required_version = ">= 0.13.5"
   backend "remote" {
-    organization = "snyk_demo_pipeline"
+    organization = "snyk-aws-demo"
 
     workspaces {
       name = "amd-aws-ecs"
@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = "ap-northeast-1"
 }
 
 data "template_file" "user_data" {
@@ -192,7 +192,7 @@ resource "aws_cloudwatch_log_group" "awslogs-app-amd" {
   name = "awslogs-app-amd"
   tags = {
     team  = "devrel marketing"
-    owner = "Angel Rivera"
+    owner = "Snyk TSM APJ"
   }
 }
 
@@ -225,7 +225,7 @@ resource "aws_alb" "main" {
   ]
   tags = {
     team  = "DevRel Marketing",
-    owner = "Angel Rivera"
+    owner = "Snyk TSM APJ"
   }
 }
 

@@ -3,9 +3,9 @@ resource "aws_vpc" "vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Name  = "DevRel AMD VPC",
-    owner = "Angel Rivera",
-    team  = "DevRel Marketing"
+    Name  = "Customer Success AMD VPC",
+    owner = "Snyk TSM APJ",
+    team  = "CustomerSolutions"
   }
 }
 
@@ -16,23 +16,23 @@ resource "aws_internet_gateway" "internet_gateway" {
 resource "aws_subnet" "pub_subnet_a" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = "10.0.0.0/24"
-  availability_zone = "us-east-1a"
+  availability_zone = "ap-northeast-1a"
   tags = {
-    Name  = "subnet-east1-a",
-    team  = "DevRel Marketing",
-    owner = "Angel Rivera",
+    Name  = "subnet-northeast1-a",
+    team  = "CustomerSolutions",
+    owner = "Snyk TSM APJ",
   }
 }
 
 resource "aws_subnet" "pub_subnet_b" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-east-1b"
+  availability_zone = "ap-northeast-1b"
 
   tags = {
-    Name  = "subnet-east1-b",
-    team  = "DevRel Marketing",
-    owner = "Angel Rivera"
+    Name  = "subnet-northeast1-b",
+    team  = "CustomerSolutions",
+    owner = "Snyk TSM APJ"
   }
 }
 
@@ -44,8 +44,8 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.internet_gateway.id
   }
   tags = {
-    team  = "DevRel Marketing",
-    owner = "Angel Rivera"
+    team  = "CustomerSolutions",
+    owner = "Snyk TSM APJ"
   }
 }
 
@@ -82,8 +82,8 @@ resource "aws_security_group" "app-amd-22" {
   }
   tags = {
     Name  = "app-amd-22-SSH",
-    team  = "DevRel Marketing",
-    owner = "Angel Rivera"
+    team  = "CustomerSolutions",
+    owner = "Snyk TSM APJ"
   }
 }
 
@@ -110,8 +110,8 @@ resource "aws_security_group" "app-amd-ELB" {
   }
   tags = {
     Name  = "app-amd-443-ELB",
-    team  = "DevRel Marketing",
-    owner = "Angel Rivera"
+    team  = "CustomerSolutions",
+    owner = "Snyk TSM APJ"
   }
 }
 
