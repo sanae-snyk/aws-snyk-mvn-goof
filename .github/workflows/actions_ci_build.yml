@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: build appcode
-      run: mvn install .
+      run: mvn install 
     - name: execute automated tests
       run: echo "running automated tests of appcode"
   scan_vulnerability:
