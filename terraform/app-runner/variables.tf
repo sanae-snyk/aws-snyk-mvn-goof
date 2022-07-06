@@ -1,7 +1,7 @@
 variable "image_name" {
   type        = string
   description = "Name of the docker image being deployed"
-  default     = "public.ecr.aws/k8z4c6u3/aws-circleci"
+  default     = "public.ecr.aws/k8z4c6u3/aws-snyk"
 }
 
 variable "image_tag" {

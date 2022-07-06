@@ -50,13 +50,13 @@ jobs:
     - name: build container image
       run: docker image build . --file Dockerfile --tag ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER
     - name: scan vulnerability
-      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container test --print-deps --org=${ORG_ID} --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER || true # *1
+      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container test --print-deps --org=${ORG_ID} --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:latest|| true # *1
     - name: monitor container image for vulnerability
-      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container monitor --print-deps --org=${ORG_ID} --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER || true # *1
+      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk container monitor --print-deps --org=${ORG_ID} --project-name=${{github.repository}} --app-vulns --nested-jars-depth=8 ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:latest || true # *1
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_LOGIN }}
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: push container image
-      run: docker push ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:$GITHUB_RUN_NUMBER
+      run: docker push ${{env.DOCKER_LOGIN}}/my-snyk-demo-mvn-goof:latest
