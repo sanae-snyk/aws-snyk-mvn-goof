@@ -49,7 +49,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform -chdir=./terraform/ecs init -backend=remote
+      run: terraform -chdir=./terraform/ecs init -backend=true
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
@@ -59,9 +59,9 @@ jobs:
     - name: Terraform Plan
       run: terraform -chdir=./terraform/ecs plan -input=false -out=tfplan
 
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". 
-      # See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+    # On push to "main", build or change infrastructure according to Terraform configuration files
+    # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". 
+    # See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
       run: |
         terraform -chdir=./terraform/ecs apply \
@@ -71,8 +71,13 @@ jobs:
         export ENDPOINT="$(terraform -chdir=./terraform/ecs output load_balancer_hostname)"
         mkdir -p /tmp/ecs/
         echo 'export ENDPOINT='${ENDPOINT} > /tmp/ecs/endpoint     
+    # specify path for persisting data
     - name: persisting data
       uses: actions/upload-artifact@v3
       with:
         name: tempFiles
         path: "/tmp/ecs/*"
+    # sleep and hold the actions process for 90 sec
+    - name: sleep and hold the actions process
+      run: sleep 90s
+      shell: bash
