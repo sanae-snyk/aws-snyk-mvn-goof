@@ -62,9 +62,9 @@ resource "aws_iam_instance_profile" "ecs_agent" {
 resource "aws_launch_configuration" "app" {
   name_prefix = "app-amd-"
   security_groups = [
-    "aws_security_group.app-amd-22.id",
-    "aws_security_group.app-amd-80.id",
-    "aws_security_group.app-amd-ELB-HTTP80.id"
+    aws_security_group.app-amd-22.id,
+    aws_security_group.app-amd-80.id,
+    aws_security_group.app-amd-ELB-HTTP80.id
   ]
   key_name                    = var.key_pair
   image_id                    = var.ami
