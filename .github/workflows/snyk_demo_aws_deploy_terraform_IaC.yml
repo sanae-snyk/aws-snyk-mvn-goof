@@ -75,18 +75,16 @@ jobs:
     - name: Terraform State Pull
       run: |
         terraform -chdir=./terraform/ecs state pull > ./terraform/ecs/tf_pulled.tfstate
-        pwd
-        cat ./terraform/ecs/tf_pulled.tfstate
-        ls -l $(pwd)/terraform/ecs/tf_pulled.tfstate
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      run: terraform -chdir=./terraform/ecs plan -input=false -out=tfplan
     # Execute snyk IaC describe to detect drift
     - name: Snyk IaC describe
       env:
         SNYK_ORG: demo_high
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       run: |
-        docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --drift --from="tfstate:///home/runner/work/aws-snyk-mvn-goof/aws-snyk-mvn-goof/terraform/ecs/tf_pulled.tfstate" || true # *1
-        pwd
-        ls -l $(pwd)/terraform/ecs/tf_pulled.tfstate
+        docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --drift --from="tfstate://$(pwd)/terraform/ecs/tf_pulled.tfstate" || true # *1
     # Clean up AWS config files
     - name: clean up aws files
       run: rm -f ${HOME}/.aws/access
