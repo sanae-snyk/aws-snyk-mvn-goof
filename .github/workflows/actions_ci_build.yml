@@ -90,7 +90,7 @@ jobs:
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
-      run: terraform -chdir=./terraform/ecs fmt -check
+      run: terraform fmt -check ./terraform/ecs
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
