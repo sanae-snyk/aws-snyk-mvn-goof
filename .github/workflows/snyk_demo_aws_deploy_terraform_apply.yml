@@ -76,7 +76,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: tempFiles
-        path: "/tmp/ecs/*"
+        path: /tmp/ecs/*
     # sleep and hold the actions process for 90 sec
     - name: sleep and hold the actions process
       run: sleep 90s
