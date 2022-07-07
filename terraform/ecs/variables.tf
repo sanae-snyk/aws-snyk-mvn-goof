@@ -20,8 +20,8 @@ variable "ami" {
 }
 
 variable "instance_type" {
-  description = "AWS AMD GravitonInstance Type"
-  default     = "t4g.medium"
+  description = "AWS AMD general purpose instance Type"
+  default     = "t3.medium"
 }
 
 variable "iam_profile" {
