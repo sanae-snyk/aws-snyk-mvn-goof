@@ -58,7 +58,6 @@ resource "aws_iam_instance_profile" "ecs_agent" {
   role = aws_iam_role.ecs_agent.name
 }
 
-
 # AWS Auto Scale Launch Configuration
 resource "aws_launch_configuration" "app" {
   name = "app-amd"
