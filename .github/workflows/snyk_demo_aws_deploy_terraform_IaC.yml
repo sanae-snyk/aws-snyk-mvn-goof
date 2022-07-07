@@ -3,10 +3,6 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-# A sample workflow which checks out your Infrastructure as Code Configuration files,
-# such as Kubernetes, Helm & Terraform and scans them for any security issues.
-# The results are then uploaded to GitHub Security Code Scanning
-#
 # For more examples, including how to limit scans to only high-severity issues
 # and fail PR checks, see https://github.com/snyk/actions/
 
@@ -35,9 +31,6 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ap-northeast-1
-    permissions:
-      contents: read # for actions/checkout to fetch code
-      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
     runs-on: ubuntu-latest
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -51,10 +44,6 @@ jobs:
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${AWS_ACCESS_KEY_ID}
-        aws-secret-access-key: ${AWS_SECRET_ACCESS_KEY}
-        aws-region: ${AWS_REGION}
 
     - name: Login to Amazon ECR
       id: login-ecr
