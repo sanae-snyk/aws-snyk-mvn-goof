@@ -51,12 +51,6 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
       
-    - name: generate aws files
-      run: |        
-        mkdir ${HOME}/.aws
-        echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}\AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" > $HOME/.aws/access
-        aws --version
-
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
@@ -84,7 +78,5 @@ jobs:
         SNYK_ORG: demo_high
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       run: |
+        cd ./terraform/ecs/
         docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --drift --from="tfstate://$(pwd)/terraform/ecs/tf_pulled.tfstate" || true # *1
-    # Clean up AWS config files
-    - name: clean up aws files
-      run: rm -f ${HOME}/.aws/access
