@@ -80,7 +80,7 @@ jobs:
       env:
         SNYK_ORG: demo_high
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --from="./terraform/ecs/tf_pulled.tfstate" || true # *1
+      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all ./terraform/ecs/tf_pulled.tfstate || true # *1
 #    - name: Upload result to GitHub Code Scanning
 #      uses: github/codeql-action/upload-sarif@v2
 #      with:
