@@ -80,6 +80,6 @@ jobs:
       env:
         SNYK_ORG: demo_high
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --drift --from="tfstate://terraform/ecs/tf_pulled.tfstate" --to="github+tf" || true # *1
+      run: docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --drift --from="tfstate://./terraform/ecs/tf_pulled.tfstate" --to="github+tf" || true # *1
     - name: clean up aws files
       run: rm -f ${HOME}/.aws/access
