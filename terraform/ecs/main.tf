@@ -60,7 +60,7 @@ resource "aws_iam_instance_profile" "ecs_agent" {
 
 # AWS Auto Scale Launch Configuration
 resource "aws_launch_configuration" "app" {
-  name = "app-amd"
+  name_prefix = "app-amd-"
   security_groups = [
     aws_security_group.app-amd-22.id,
     aws_security_group.app-amd-80.id,
@@ -99,6 +99,7 @@ resource "aws_autoscaling_group" "app" {
     value               = "app-amd"
     propagate_at_launch = true
   }
+  depends_on = [aws_launch_configuration.app, aws_alb_target_group.alb]
 }
 
 # ASG Scaling Policies
