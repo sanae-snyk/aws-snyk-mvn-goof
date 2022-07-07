@@ -12,9 +12,8 @@ on:
         required: false
 
 jobs:
-  terraform:
-    needs: refresh_container
-    name: 'Terraform'
+  terraform_destroy:
+    name: 'Terraform destroy'
     runs-on: ubuntu-latest
     environment: snyk_aws_demo
     env:
