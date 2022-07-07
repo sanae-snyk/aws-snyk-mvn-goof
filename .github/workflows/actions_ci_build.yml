@@ -1,10 +1,20 @@
 name: Snyk AWS Demo using GithubActions
 
+#on:
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'name of the Snyk team'
+        required: true
+        default: 'Snyk TSM APJ'
+      country:
+        description: 'Country'
+        required: false
 
 jobs:
   test_appcode:
