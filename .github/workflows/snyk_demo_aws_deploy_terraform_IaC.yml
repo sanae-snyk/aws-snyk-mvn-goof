@@ -84,9 +84,9 @@ jobs:
         SNYK_ORG: demo_high
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       run: |
-        docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --drift --from="tfstate://./terraform/ecs/tf_pulled.tfstate" --to="github+tf" || true # *1
+        docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --drift --from="tfstate://$(pwd)/terraform/ecs/tf_pulled.tfstate" --to="github+tf" || true # *1
         pwd
-        ls -l $(pwd)
+        ls -l $(pwd)/terraform/ecs/tf_pulled.tfstate
     # Clean up AWS config files
     - name: clean up aws files
       run: rm -f ${HOME}/.aws/access
