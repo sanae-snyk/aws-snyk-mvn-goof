@@ -49,7 +49,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform -chdir=./terraform/ecs init
+      run: terraform -chdir=./terraform/ecs init -backend=remote
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
@@ -57,7 +57,7 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform -chdir=./terraform/ecs plan -input=false
+      run: terraform -chdir=./terraform/ecs plan -input=false -out=tfplan
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". 
@@ -71,3 +71,8 @@ jobs:
         export ENDPOINT="$(terraform -chdir=./terraform/ecs output load_balancer_hostname)"
         mkdir -p /tmp/ecs/
         echo 'export ENDPOINT='${ENDPOINT} > /tmp/ecs/endpoint     
+    - name: persisting data
+      uses: actions/upload-artifact@v3
+      with:
+        name: tempFiles
+        path: "/tmp/ecs/*"
