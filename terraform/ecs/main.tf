@@ -93,7 +93,7 @@ resource "aws_autoscaling_group" "app" {
   min_size             = var.asg_min
   max_size             = var.asg_max
   desired_capacity     = var.asg_desired
-  launch_configuration = aws_launch_configuration.app.name
+  launch_configuration = aws_launch_configuration.app
   target_group_arns    = [aws_alb_target_group.alb.arn]
   tag {
     key                 = "Name"
