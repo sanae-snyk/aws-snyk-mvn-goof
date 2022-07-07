@@ -198,11 +198,11 @@ resource "aws_cloudwatch_log_group" "awslogs-app-amd" {
 
 # AWS Application Load Balancer Target Group
 resource "aws_alb_target_group" "alb" {
-  name     = "app-amd"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.vpc.id
-  deregistration_delay  = 10
+  name                 = "app-amd"
+  port                 = 80
+  protocol             = "HTTP"
+  vpc_id               = aws_vpc.vpc.id
+  deregistration_delay = 10
   health_check {
     path                = "/"
     healthy_threshold   = 5
