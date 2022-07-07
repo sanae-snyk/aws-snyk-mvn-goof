@@ -76,7 +76,7 @@ jobs:
     - name: Terraform State Pull
       run: |
         terraform -chdir=./terraform/ecs state pull > ./tf_pulled.tfstate
-        cat ./terraform/ecs/tf_pulled.tfstate
+        cat ./tf_pulled.tfstate
     - name: scan vulnerability
       env:
         SNYK_ORG: demo_high
