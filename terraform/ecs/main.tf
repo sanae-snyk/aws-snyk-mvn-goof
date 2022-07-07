@@ -1,7 +1,7 @@
 terraform {
   required_version = ">= 0.13.5"
   backend "remote" {
-    organization = "snyk-aws-demo"
+    organization = "snyk_demo_pipeline"
 
     workspaces {
       name = "amd-aws-ecs"

@@ -1,6 +1,6 @@
 terraform {
   backend "remote" {
-    organization = "" # Enter the Terraform Cloud Organization here
+    organization = "snyk_demo_pipeline" # Enter the Terraform Cloud Organization here
 
     workspaces {
       name = "ecr-aws-snyk"
