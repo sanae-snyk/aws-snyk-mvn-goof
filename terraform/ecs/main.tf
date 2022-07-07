@@ -61,6 +61,7 @@ resource "aws_iam_instance_profile" "ecs_agent" {
 
 # AWS Auto Scale Launch Configuration
 resource "aws_launch_configuration" "app" {
+  name = "app-amd"
   name_prefix = "app-amd-"
   security_groups = [
     aws_security_group.app-amd-22.id,
@@ -93,7 +94,7 @@ resource "aws_autoscaling_group" "app" {
   min_size             = var.asg_min
   max_size             = var.asg_max
   desired_capacity     = var.asg_desired
-  launch_configuration = aws_launch_configuration.app
+  launch_configuration = aws_launch_configuration.app.name
   target_group_arns    = [aws_alb_target_group.alb.arn]
   tag {
     key                 = "Name"
