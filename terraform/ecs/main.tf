@@ -62,9 +62,9 @@ resource "aws_iam_instance_profile" "ecs_agent" {
 resource "aws_launch_configuration" "app" {
   name_prefix = "app-amd-"
   security_groups = [
-    aws_security_group.app-amd-22.id,
-    aws_security_group.app-amd-80.id,
-    aws_security_group.app-amd-ELB-HTTP80.id
+    "aws_security_group.app-amd-22.id",
+    "aws_security_group.app-amd-80.id",
+    "aws_security_group.app-amd-ELB-HTTP80.id"
   ]
   key_name                    = var.key_pair
   image_id                    = var.ami
@@ -72,7 +72,6 @@ resource "aws_launch_configuration" "app" {
   iam_instance_profile        = aws_iam_instance_profile.ecs_agent.name
   user_data                   = data.template_file.user_data.rendered
   associate_public_ip_address = true
-
   root_block_device {
     volume_size           = 60
     volume_type           = "standard"
@@ -93,13 +92,13 @@ resource "aws_autoscaling_group" "app" {
   max_size             = var.asg_max
   desired_capacity     = var.asg_desired
   launch_configuration = aws_launch_configuration.app.name
-  target_group_arns    = [aws_alb_target_group.alb.arn]
+  target_group_arns    = ["aws_alb_target_group.alb.arn"]
   tag {
     key                 = "Name"
     value               = "app-amd"
     propagate_at_launch = true
   }
-  depends_on = [aws_launch_configuration.app, aws_alb_target_group.alb]
+  depends_on = ["aws_launch_configuration.app", "aws_alb_target_group.alb"]
 }
 
 # ASG Scaling Policies
@@ -183,7 +182,7 @@ resource "aws_autoscaling_notification" "asg_notifications" {
 
   topic_arn = aws_sns_topic.app-amd-sns.arn
   depends_on = [
-    aws_autoscaling_group.app
+    "aws_autoscaling_group.app"
   ]
 }
 
