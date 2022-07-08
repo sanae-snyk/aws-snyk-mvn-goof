@@ -79,4 +79,4 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       run: |
         cd $(pwd)/terraform/ecs
-        docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --config-dir=$(pwd)/terraform/ecs --from="tfstate://./terraform/ecs/tf_pulled.tfstate" || true # *1
+        docker run --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --config-dir=$(pwd)/terraform/ecs --from="tfstate+tfcloud://ws-khDEQuT2DgFUgsny" || true # *1
