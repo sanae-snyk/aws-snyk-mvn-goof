@@ -79,5 +79,5 @@ jobs:
         path: /tmp/ecs/*
     # sleep and hold the actions process for 90 sec
     - name: sleep and hold the actions process
-      run: sleep 90s
+      run: sleep 45s
       shell: bash

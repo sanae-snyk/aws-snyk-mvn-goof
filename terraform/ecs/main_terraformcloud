@@ -1,9 +1,11 @@
 terraform {
   required_version = ">= 0.13.5"
-  backend "s3" {
-    bucket = "snyk_demo_pipeline"
-    key    = "snyk_demo/terraform/java_goof/state"
-    region = "ap-northeast-1"
+  backend "remote" {
+    organization = "snyk_demo_pipeline"
+
+    workspaces {
+      name = "amd-aws-ecs"
+    }
   }
 }
 
