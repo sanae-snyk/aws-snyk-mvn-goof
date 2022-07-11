@@ -82,5 +82,6 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       run: |
         ls -al ./terraform/ecs
+        docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock --volume "$(pwd)/terraform/ecs":/var snyk/snyk:docker ls -al /var/tf_pulled.tfstate  || true # *1
         docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock --volume "$(pwd)/terraform/ecs":/var snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --config-dir=/var --from="tfstate:///var/tf_pulled.tfstate" --to=aws+tf  || true # *1
         docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --config-dir=$(pwd)/terraform/ecs --from="tfstate+s3://snyk-demo-pipeline/tfstate/javagoof/snyk_demo_tfstate" || true # *1
