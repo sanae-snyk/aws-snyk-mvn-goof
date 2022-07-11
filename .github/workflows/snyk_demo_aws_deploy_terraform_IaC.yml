@@ -77,8 +77,9 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ env.AWS_REGION }}
         SNYK_ORG: demo_high
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       run: |
         cd $(pwd)/terraform/ecs
-        docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --config-dir=$(pwd)/terraform/ecs --from="tfstate://./terraform/ecs/tf_pulled.tfstate" || true # *1
+        docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --config-dir=$(pwd)/terraform/ecs --from="tfstate://./terraform/ecs/tf_pulled.tfstate" || true # *1
