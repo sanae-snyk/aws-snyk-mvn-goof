@@ -1,8 +1,8 @@
 terraform {
   required_version = ">= 0.13.5"
   backend "s3" {
-    bucket = "snyk_demo_pipeline"
-    key    = "snyk_demo/terraform/java_goof/state"
+    bucket = "snyk-demo-pipeline"
+    key    = "tfstate/javagoof"
     region = "ap-northeast-1"
   }
 }
