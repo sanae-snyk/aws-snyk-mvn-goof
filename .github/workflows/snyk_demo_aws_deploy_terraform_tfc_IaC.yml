@@ -69,7 +69,6 @@ jobs:
     - name: Terraform State Pull
       run: |
         terraform -chdir=./terraform/ecs state pull > ./terraform/tf_pulled.tfstate
-        head ./terraform/tf_pulled.tfstate
         tail ./terraform/tf_pulled.tfstate
         sleep 5
         echo $HOME
@@ -84,5 +83,5 @@ jobs:
         SNYK_ORG: demo_high
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       run: |
-        docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env CLI_CONFIG_CREDENTIALS_TOKEN --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --from="tfstate+tfcloud://ws-khDEQuT2DgFUgsny"  || true # *1
+        docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env CLI_CONFIG_CREDENTIALS_TOKEN --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock snyk/snyk:docker --volume /home/runner:/root snyk iac describe --org=${SNYK_ORG} --all --from="tfstate+tfcloud://ws-khDEQuT2DgFUgsny"  || true # *1
         docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock --volume "$(pwd)/terraform":/var snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --config-dir=/var --from="tfstate:///var/tf_pulled.tfstate"  || true # *1
