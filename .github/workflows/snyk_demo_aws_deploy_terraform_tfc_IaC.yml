@@ -69,7 +69,7 @@ jobs:
     - name: Terraform State Pull
       run: |
         terraform -chdir=./terraform/ecs state pull | grep -v "chdir=./terraform/ecs state pull" > ./terraform/tf_pulled.tfstate
-        echo. >> ./terraform/tf_pulled.tfstate
+        echo "" >> ./terraform/tf_pulled.tfstate
         head ./terraform/tf_pulled.tfstate 
         sleep 5
         echo $HOME
