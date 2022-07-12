@@ -1,0 +1,83 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# For more examples, including how to limit scans to only high-severity issues
+# and fail PR checks, see https://github.com/snyk/actions/
+
+name: Snyk Infrastructure as Code
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'name of the Snyk team'
+        required: true
+        default: 'Snyk TSM APJ'
+      country:
+        description: 'Country'
+        required: false
+  schedule:
+    - cron: '20 5 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  snyk:
+    environment: snyk_aws_demo
+    env:
+      AWS_REGION: ap-northeast-1
+    runs-on: ubuntu-latest
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        cli_config_credentials_token: ${{ secrets.TERRAFORM_TOKEN }}
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform -chdir=./terraform/ecs init -input=false
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: terraform fmt -check ./terraform/ecs
+
+    # Pull Terraform state into a local file
+    - name: Terraform State Pull
+      run: |
+        terraform -chdir=./terraform/ecs state pull > ./terraform/ecs/tf_pulled.tfstate
+    # Execute snyk IaC describe to detect drift
+    - name: Snyk IaC describe
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ env.AWS_REGION }}
+        SNYK_ORG: demo_high
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      run: |
+        ls -al ./terraform/ecs
+        docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock --volume "$(pwd)/terraform/ecs":/var snyk/snyk:docker ls -al /var/tf_pulled.tfstate  || true # *1
+        docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock --volume "$(pwd)/terraform/ecs":/var snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --config-dir=/var --from="tfstate:///var/tf_pulled.tfstate" --to=aws+tf  || true # *1
