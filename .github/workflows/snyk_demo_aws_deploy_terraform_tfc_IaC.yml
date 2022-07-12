@@ -68,7 +68,7 @@ jobs:
     # Pull Terraform state into a local file
     - name: Terraform State Pull
       run: |
-        terraform -chdir=./terraform/ecs state pull > ./terraform/ecs/tf_pulled.tfstate
+        terraform -chdir=./terraform/ecs state pull | tee ./terraform/ecs/tf_pulled.tfstate
     # Execute snyk IaC describe to detect drift
     - name: Snyk IaC describe
       env:
@@ -77,6 +77,7 @@ jobs:
         AWS_REGION: ${{ env.AWS_REGION }}
         SNYK_ORG: demo_high
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        CLI_CONFIG_CREDENTIALS_TOKEN: ${{ secrets.TERRAFORM_TOKEN }}
       run: |
         docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock --volume "$(pwd)/terraform/ecs":/var snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --config-dir=/var --from="tfstate+tfcloud://ws-khDEQuT2DgFUgsny"  || true # *1
         docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock --volume "$(pwd)/terraform/ecs":/var snyk/snyk:docker head /var/tf_pulled.tfstate  || true # *1
