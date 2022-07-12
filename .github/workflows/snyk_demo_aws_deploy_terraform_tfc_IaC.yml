@@ -83,6 +83,6 @@ jobs:
         SNYK_ORG: demo_high
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       run: |
-        docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock -v /home/runner:/root snyk/snyk:docker ls -al /root"  || true # *1
+        docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock -v /home/runner:/root snyk/snyk:docker ls -al /root  || true # *1
         docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock -v /home/runner:/root snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --from="tfstate+tfcloud://ws-khDEQuT2DgFUgsny"  || true # *1
         docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_REGION --env SNYK_TOKEN -v /var/run/docker.sock:/var/run/docker.sock --volume "$(pwd)/terraform":/var snyk/snyk:docker snyk iac describe --org=${SNYK_ORG} --all --config-dir=/var --from="tfstate:///var/tf_pulled.tfstate"  || true # *1
