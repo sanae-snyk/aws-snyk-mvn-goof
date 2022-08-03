@@ -19,7 +19,7 @@ on:
         description: 'Country'
         required: false
   schedule:
-    - cron: '20 5 * * 1'
+    - cron: '20 5 1 1 1'
 
 permissions:
   contents: read
